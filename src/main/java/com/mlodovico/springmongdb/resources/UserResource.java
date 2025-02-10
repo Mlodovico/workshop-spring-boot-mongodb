@@ -1,26 +1,33 @@
 package com.mlodovico.springmongdb.resources;
 
-import com.mlodovico.springmongdb.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import com.mlodovico.springmongdb.domains.User;
+import com.mlodovico.springmongdb.services.UserService;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
 
+    @Autowired
+    private UserService service;
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> findAll(){
-        User maria = new User("1", "Maria Brown", "maria@gmail.com");
-        User alex = new User("2", "Alex Silva", "alex@gmail.com");
+        try {
+            List<User> list = service.findAll();
 
-        List<User> list = new ArrayList<>(Arrays.asList(maria, alex));
-
-        return ResponseEntity.ok().body(list);
+            return ResponseEntity.ok().body(list);
+        } catch (RuntimeException e){
+            return ResponseEntity.noContent().build();
+        }
     }
 }
