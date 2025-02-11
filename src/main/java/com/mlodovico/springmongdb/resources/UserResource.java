@@ -1,5 +1,6 @@
 package com.mlodovico.springmongdb.resources;
 
+import com.mlodovico.springmongdb.models.dtos.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,12 @@ public class UserResource {
     private UserService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>> findAll(){
+    public ResponseEntity<List<UserDTO>> findAll(){
         try {
             List<User> list = service.findAll();
+            List<UserDTO> listDTO = list.stream().map(UserDTO::new).toList();
 
-            return ResponseEntity.ok().body(list);
+            return ResponseEntity.ok().body(listDTO);
         } catch (RuntimeException e){
             return ResponseEntity.noContent().build();
         }
