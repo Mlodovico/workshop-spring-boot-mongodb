@@ -1,5 +1,6 @@
 package com.mlodovico.springmongdb.services;
 
+import com.mlodovico.springmongdb.models.dtos.UserDTO;
 import com.mlodovico.springmongdb.repositories.UserRepository;
 import com.mlodovico.springmongdb.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,16 @@ public class UserService {
         }
 
         return user;
+    }
+
+    public User insert(User newUser) {
+
+
+
+        return repo.insert(newUser);
+    }
+
+    public User fromDTO(UserDTO userDTO){
+        return new User(userDTO.getId(), userDTO.getName(), userDTO.getEmail());
     }
 }

@@ -5,15 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 import com.mlodovico.springmongdb.domains.User;
 import com.mlodovico.springmongdb.services.UserService;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -40,6 +39,20 @@ public class UserResource {
             User user = service.FindById(id);
 
             return ResponseEntity.ok().body(new UserDTO(user));
+        } catch (RuntimeException e){
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> insert(@RequestBody UserDTO userDTO){
+        try {
+            User newUser = service.fromDTO(userDTO);
+
+            newUser = service.insert(newUser);
+
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newUser.getId()).toUri();
+            return ResponseEntity.created(uri).build();
         } catch (RuntimeException e){
             return ResponseEntity.noContent().build();
         }
