@@ -2,6 +2,7 @@ package com.mlodovico.springmongdb.config;
 
 import com.mlodovico.springmongdb.domains.Post;
 import com.mlodovico.springmongdb.domains.User;
+import com.mlodovico.springmongdb.models.dtos.AuthorDTO;
 import com.mlodovico.springmongdb.repositories.PostRepository;
 import com.mlodovico.springmongdb.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,12 @@ public class Instantiation implements CommandLineRunner {
         User u2 = new User(null, "Alex Green", "alexgr@yahoo.com");
         User u3 = new User(null, "Bob Grey", "bob@yahoo.com");
 
-        Post p1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "Vou viajar para São Paulo. Abraços!", u1);
-        Post p2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia", "Acordei feliz hoje!", u1);
-        Post p3 = new Post(null, sdf.parse("29/03/2018"), "Praiou", "Muito bom viajar para praia!", u2);
-
         userRepository.saveAll(Arrays.asList(u1, u2, u3));
+
+        Post p1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "Vou viajar para São Paulo. Abraços!", new AuthorDTO(u1));
+        Post p2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia", "Acordei feliz hoje!", new AuthorDTO(u1));
+        Post p3 = new Post(null, sdf.parse("29/03/2018"), "Praiou", "Muito bom viajar para praia!", new AuthorDTO(u2));
+
         postRepository.saveAll(Arrays.asList(p1, p2, p3));
     }
 }
