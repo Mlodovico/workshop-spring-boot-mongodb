@@ -1,5 +1,6 @@
 package com.mlodovico.springmongdb.resources;
 
+import com.mlodovico.springmongdb.domains.Post;
 import com.mlodovico.springmongdb.models.dtos.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,6 +40,17 @@ public class UserResource {
             User user = service.FindById(id);
 
             return ResponseEntity.ok().body(new UserDTO(user));
+        } catch (RuntimeException e){
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @RequestMapping(value = "/{id}/posts", method = RequestMethod.GET)
+    public ResponseEntity<List<Post>> findPostsById(@PathVariable String id){
+        try {
+            User user = service.FindById(id);
+
+            return ResponseEntity.ok().body(user.getPosts());
         } catch (RuntimeException e){
             return ResponseEntity.noContent().build();
         }
